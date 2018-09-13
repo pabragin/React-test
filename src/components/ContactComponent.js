@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Breadcrumb, BreadcrumbItem,
-    Button, Label, Col} from 'reactstrap';
+    Button, Label, Col, Row} from 'reactstrap';
 import { Control, LocalForm, Errors } from 'react-redux-form';
 import { Link } from 'react-router-dom';
 
@@ -64,11 +64,7 @@ render() {
                             <Col md={10}>
                                 <Control.text model=".email" id="email" name="email"
                                        placeholder="Email"
-                                       value={this.state.email}
-                                       valid={errors.email === ''}
-                                       invalid={errors.email !== ''}
-                                       onBlur={this.handleBlur('email')}
-                                       onChange={this.handleInputChange} />
+                                       className="form-control"/>
                             </Col>
                         </Row>
                         <Row className="form-group">
