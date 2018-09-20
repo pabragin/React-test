@@ -74,29 +74,6 @@ export const addComments = (comments) => ({
     payload: comments
 });
 
-export const fetchPromos = () => (dispatch) => {
-
-    dispatch(promosLoading());
-
-    return fetch(baseUrl + 'promotions')
-        .then(response => {
-                if (response.ok) {
-                    return response;
-                } else {
-                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
-                    error.response = response;
-                    throw error;
-                }
-            },
-            error => {
-                var errmess = new Error(error.message);
-                throw errmess;
-            })
-        .then(response => response.json())
-        .then(promos => dispatch(addPromos(promos)))
-        .catch(error => dispatch(promosFailed(error.message)));
-};
-
 export const postComment = (dishId, rating, author, comment) => (dispatch) => {
 
     const newComment = {
@@ -132,6 +109,29 @@ export const postComment = (dishId, rating, author, comment) => (dispatch) => {
         .catch(error =>  { console.log('post comments', error.message); alert('Your comment could not be posted\nError: '+error.message); });
 };
 
+export const fetchPromos = () => (dispatch) => {
+
+    dispatch(promosLoading());
+
+    return fetch(baseUrl + 'promotions')
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                var errmess = new Error(error.message);
+                throw errmess;
+            })
+        .then(response => response.json())
+        .then(promos => dispatch(addPromos(promos)))
+        .catch(error => dispatch(promosFailed(error.message)));
+};
+
 export const promosLoading = () => ({
     type: ActionTypes.PROMOS_LOADING
 });
@@ -145,3 +145,65 @@ export const addPromos = (promos) => ({
     type: ActionTypes.ADD_PROMOS,
     payload: promos
 });
+
+export const fetchLeaders = () => (dispatch) => {
+
+    dispatch(leadersLoading());
+
+    return fetch(baseUrl + 'leaders')
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    let error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                let errmess = new Error(error.message);
+                throw errmess;
+            })
+        .then(response => response.json())
+        .then(leaders => dispatch(addLeaders(leaders)))
+        .catch(error => dispatch(leadersFailed(error.message)));
+};
+
+export const leadersLoading = () => ({
+    type: ActionTypes.PROMOS_LOADING
+});
+
+export const leadersFailed = (errmess) => ({
+    type: ActionTypes.LEADERS_FAILED,
+    payload: errmess
+});
+
+export const addLeaders = (promos) => ({
+    type: ActionTypes.ADD_LEADERS,
+    payload: promos
+});
+
+export const postFeedback = (feedback) => () => {
+
+    return fetch(baseUrl + 'feedback', {
+        method: "POST",
+        body: JSON.stringify(feedback),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "same-origin"
+    })
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                throw error;
+            })
+        .catch(error =>  { console.log('post feedback', error.message); alert('Your feedback could not be posted\nError: '+error.message); });
+};
