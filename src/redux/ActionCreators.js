@@ -183,7 +183,17 @@ export const addLeaders = (promos) => ({
     payload: promos
 });
 
-export const postFeedback = (feedback) => () => {
+export const feedbackFailed = (errmess) => ({
+    type: ActionTypes.FEEDBACK_FAILED,
+    payload: errmess
+});
+
+export const addFeedback = (feedback) => ({
+    type: ActionTypes.ADD_FEEDBACK,
+    payload: feedback
+});
+
+export const postFeedback = (feedback) => (dispatch) => {
 
     return fetch(baseUrl + 'feedback', {
         method: "POST",
@@ -205,5 +215,8 @@ export const postFeedback = (feedback) => () => {
             error => {
                 throw error;
             })
-        .catch(error =>  { console.log('post feedback', error.message); alert('Your feedback could not be posted\nError: '+error.message); });
+        .catch(error =>  { console.log('post feedback', error.message); alert('Your feedback could not be posted\nError: '+error.message); })
+        .then(response => response.json())
+        .then(feedback => dispatch(addFeedback(feedback)))
+        .catch(error => dispatch(feedbackFailed(error.message)));
 };
